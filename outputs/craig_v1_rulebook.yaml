@@ -1,0 +1,225 @@
+version: craig_v1_0
+generated_for: gold_v03_decision_units_v1
+objective: >
+  Reproduce Craig-style decision state from information available up to the
+  decision point. This rulebook is not a profit optimizer and not an
+  automated trading system.
+
+source_artifacts:
+  decision_units: outputs/gold_v03_decision_units_v1.csv
+  canonical_mapping: outputs/gold_v03_canonical_mapping_v1.csv
+  normalization_audit: outputs/gold_v03_v1_normalization_audit.md
+  ohlcv_coverage_manifest: outputs/gold_v03_v1_ohlcv_coverage_manifest.csv
+  design_doc: outputs/gold_v03_craig_rule_model_v1_design.md
+  feature_audit: outputs/gold_v03_feature_audit_v1.csv
+
+runtime_input_contract:
+  allowed_inputs:
+    - candles_up_to_decision_time
+    - frame_or_chart_quantified_structure_up_to_decision_time
+    - same_day_news_or_macro_calendar_up_to_decision_time
+    - session_state_from_prior_replay_steps
+  disallowed_inputs:
+    - realized_result_raw
+    - rule_outcome_feature
+    - exit_result_ko_as_feature
+    - future_candles_for_policy_decision
+    - exact_entry_stop_target_when_geometry_mode_is_frame_relative
+    - Craig_post_trade_explanation_as_runtime_feature
+  news_macro_status:
+    current_state: placeholder_contract_only
+    join_key:
+      - market_date_utc_minus4
+      - decision_time_ny
+      - asset_class
+    expected_columns:
+      - event_id
+      - event_time_utc
+      - event_name
+      - impact
+      - minutes_to_event
+      - event_direction_if_known_before_decision
+      - source_url_or_source_name
+    default_without_join:
+      high_impact_news_proximity: unknown_external_not_joined
+      news_directional_regime: unknown_external_not_joined
+      blocks_trade: false
+
+canonical_enum_review:
+  current_assessment: sufficient_for_v1_engine_scaffold
+  known_limits:
+    - decision_type_raw still mixes execution, outcome, and management language.
+    - decision_subtype should be treated as row-specific evidence, not as a raw-label-only mapping.
+    - outcome raw blank maps to multiple canonical outcomes; preserve unknown when source result is missing.
+  v1_1_mapping_proposal:
+    principle: >
+      Do not change raw gold context. Add a mapping view that separates raw
+      decision type from row-specific outcome and management signals.
+    proposed_fields:
+      - mapping_type
+      - raw_value
+      - current_canonical_summary
+      - proposed_decision_class_rule
+      - proposed_fill_state_rule
+      - proposed_subtype_rule
+      - review_reason
+    proposals:
+      - raw_value: executed_trade
+        proposed_decision_class_rule: executed_trade
+        proposed_fill_state_rule: filled
+        proposed_subtype_rule: derive_from_row_outcome_and_management_fields
+        review_reason: raw label is broad; current subtype distribution is mixed.
+      - raw_value: executed_winner_context
+        proposed_decision_class_rule: executed_trade
+        proposed_fill_state_rule: filled
+        proposed_subtype_rule: do_not_force_winner_from_raw_label
+        review_reason: row outcomes include runner, loss, and breakeven context.
+      - raw_value: executed_or_actionable_trade
+        proposed_decision_class_rule: use_gold_status_to_split_executed_vs_actionable
+        proposed_fill_state_rule: filled_only_when_trade_context_ready_and_execution_visible
+        proposed_subtype_rule: derive_cancel_or_winner_from row fields
+        review_reason: raw label is intentionally ambiguous.
+      - raw_value: missed_fill
+        proposed_decision_class_rule: planned_no_fill
+        proposed_fill_state_rule: not_filled
+        proposed_subtype_rule: no_fill_or_missed_by_fraction
+        review_reason: do not score as failed take.
+      - mapping_type: outcome_blank
+        raw_value: ''
+        proposed_decision_class_rule: unchanged
+        proposed_fill_state_rule: unchanged
+        proposed_subtype_rule: keep outcome_class unknown unless another source field explicitly supports no_fill/pass/breakeven
+        review_reason: blank realized result does not imply any outcome by itself.
+
+features:
+  session_phase:
+    method: parse verified NY-local decision time when possible
+    fallback: phrase-based approximate anchor with confidence flag
+    leakage_risk: low
+  high_impact_news_proximity:
+    method: external calendar join contract only
+    current_value: unknown_external_not_joined
+    leakage_risk: low
+  relative_strength:
+    symbols:
+      - BTCUSDT
+      - ETHUSDT
+      - SOLUSDT
+      - ATOMUSDT
+    windows_minutes:
+      - 5
+      - 20
+      - 60
+    method: close-to-close returns up to decision cutoff
+  volatility_regime:
+    method: ATR20 percent of price, one-hour range percent, current body/range score
+    buckets:
+      compressed: atr_pct < 0.0015
+      normal: 0.0015 <= atr_pct < 0.004
+      expanded: 0.004 <= atr_pct < 0.008
+      extreme: atr_pct >= 0.008
+  htf_bias_location:
+    method: intraday 15m and 1h trend score plus same-day range location
+    note: dated OHLCV files are enough for session replay but not full multi-day HFT reconstruction.
+  fvg:
+    method: three-candle imbalance detector on completed candles only
+    freshness:
+      - new_or_active
+      - midpoint_touched
+      - fully_mitigated
+      - invalidated
+  choch_bos_displacement:
+    method: break of prior 5/12 bar high-low with displacement score
+    confidence: medium_heuristic
+  sr_flip_pivot_cluster:
+    method: swing high-low clustering with ATR tolerance
+    confidence: medium_low_heuristic
+  trendline_channel:
+    method: projection through recent swing highs/lows
+    confidence: low_heuristic
+  sweep_liquidity:
+    method: prior 20-bar high-low sweep and close back inside
+    confidence: medium_heuristic
+  elliott_fib:
+    source_label: use explicit gold source label only as source-supported label
+    auto_detector: low_confidence_recent_swing_fib_ratio
+    rule: do_not_infer_wave_count_when_not_stated
+  entry_invalidation_no_chase:
+    numeric_geometry:
+      method: calculate distance to entry, RR, prior touch, stop/target simulation
+    frame_relative_geometry:
+      method: policy_features_only
+      exact_fill_backtest_allowed: false
+
+state_machine:
+  states:
+    - observe_session_state
+    - form_thesis
+    - rank_select_symbol
+    - wait_for_setup
+    - plan_entry
+    - wait_for_touch_or_fill
+    - execute_no_fill_pass_cancel
+    - manage_risk
+    - exit_hold_unknown
+  transitions:
+    observe_session_state:
+      if_missing_runtime_evidence: hold_unknown
+      else: form_thesis
+    form_thesis:
+      if_no_htf_reason_and_weak_ltf_signal: wait_for_setup
+      else: rank_select_symbol
+    rank_select_symbol:
+      if_selected_symbol_not_clean_enough: wait_for_setup
+      else: wait_for_setup
+    wait_for_setup:
+      if_fvg_or_sr_or_choch_confluence: plan_entry
+      else: wait_for_setup
+    plan_entry:
+      if_geometry_numeric_and_chase_risk_high: pass_or_cancel
+      if_geometry_frame_relative: policy_only_no_exact_fill
+      else: wait_for_touch_or_fill
+    wait_for_touch_or_fill:
+      if_entry_touched: execute
+      if_price_runs_without_touch: no_fill
+      if_true_touch_already_passed: cancel
+    manage_risk:
+      if_confirmation_close: move_to_be_or_reduce_risk
+      if_followthrough_fails: manual_flat_or_profit_stop
+      if_profit_locked_and_htf_draw_valid: runner_hold
+    exit_hold_unknown:
+      terminal: true
+
+replay_layers:
+  policy_replay:
+    denominator: eligible_for_policy_learning_true
+    target_actions:
+      filled: take
+      not_filled: no_fill
+      passed: pass
+      cancelled: cancel
+      managed_existing: management
+      planned_unknown_fill: wait
+      context_only: exclude_context_prior
+    note: Unknown outcomes are allowed for policy action replay when the action itself is known.
+  exact_fill_replay:
+    denominator: eligible_for_fill_backtest_true
+    allowed_geometry_modes:
+      - numeric_exact
+      - numeric_partial
+    forbidden_geometry_modes:
+      - frame_relative
+      - prose_only
+      - unknown
+  management_replay:
+    denominator: eligible_for_management_replay_true
+    modes:
+      - numeric_trigger_validation_when_geometry_available
+      - family_compatibility_when_geometry_frame_relative
+
+validation_principles:
+  - Unknown or context-only rows are not policy failures.
+  - Frame-relative rows can train policy but cannot enter exact PnL backtest.
+  - Replay results must report exclusions separately from mismatches.
+  - Every prediction must include a rule trace.
+  - Scripts must preserve raw labels and never mutate gold source files.

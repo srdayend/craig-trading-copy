@@ -1,0 +1,83 @@
+version: craig_v1_1
+inherits_from: craig_v1_0
+generated_for: gold_v03_decision_units_v1
+generated_by: scripts/run_craig_v1_1_mismatch_calibration.py
+objective: >
+  Mismatch-driven calibration of the v1 policy layer. This update
+  does not add new features, does not mutate gold labels, and does
+  not use future candles or realized outcomes for policy decisions.
+
+source_artifacts:
+  feature_matrix: outputs/craig_v1_feature_matrix.csv
+  v1_replay_results: outputs/craig_v1_replay_results.csv
+  v1_validation_report: outputs/craig_v1_validation_report.md
+  v1_rulebook: outputs/craig_v1_rulebook.yaml
+  decision_units: outputs/gold_v03_decision_units_v1.csv
+
+calibration_scope:
+  mode: mismatch_driven_policy_layer_only
+  no_new_feature_expansion: true
+  exact_fill_layer_changed: false
+  management_layer_changed: false
+  preserve_v1_inputs_and_gold_labels: true
+
+v1_baseline:
+  policy_evaluated_rows: 117
+  policy_matches: 26
+  policy_accuracy: "22.2%"
+  target_take_recall: "22/91 (24.2%)"
+  take_wait_mismatches: 62
+  take_cancel_mismatches: 5
+
+v1_1_result:
+  policy_evaluated_rows: 117
+  policy_matches: 47
+  policy_accuracy: "40.2%"
+  policy_accuracy_delta_vs_v1: "+17.9 pp"
+  target_take_recall: "43/91 (47.3%)"
+  take_wait_mismatches: 46
+  take_cancel_mismatches: 0
+
+policy_replay_calibrations:
+  fvg_freshness_softening:
+    v1_behavior: fully_mitigated_fvg_and_quality_below_5_implies_cancel
+    v1_1_behavior: >
+      Fully mitigated FVG is not terminal by itself when another active
+      same-side FVG exists, geometry is frame/prose-relative, or the
+      decision time is approximate. Continue to confluence scoring unless
+      numeric geometry, reliable time, no active FVG, and very low score
+      all point to a stale setup.
+    hard_cancel_max_score: 3.5
+  htf_bias_softening:
+    v1_behavior: relative_laggard_plus_htf_against_blocks_when_quality_below_5
+    v1_1_behavior: >
+      HTF-against and relative-laggard evidence demotes only very weak
+      LTF setups. Craig often still takes a framed FVG/SR entry when the
+      local setup is actionable.
+    veto_only_when_quality_below: 3.0
+  balanced_confluence_take_threshold:
+    v1_threshold: 6.0
+    v1_1_threshold: 4.5
+    applies_when:
+      - runtime evidence is present
+      - candidate side is tradeable
+      - no hard no-chase flag is present
+      - no hard numeric stale-FVG cancel is present
+    principle: >
+      A Craig take often appears at medium confluence when the plan is
+      frame-defined and supported by FVG/SR/HTF context. v1 required
+      near-perfect proxy confluence and over-produced wait.
+
+unchanged_guardrails:
+  - hold_unknown_when_runtime_evidence_missing
+  - hold_unknown_when_candidate_side_is_not_tradeable
+  - no_chase_pass_for_high_far_from_entry_or_compressed_rr
+  - no_future_candles_for_policy_decision
+  - no_realized_outcome_or_rule_outcome_feature_for_policy_decision
+  - frame_relative_rows_remain_excluded_from_exact_fill_backtest
+
+known_limits:
+  - news_macro_features_remain_placeholder_not_joined
+  - frame_relative_geometry_still_limits exact entry and cancellation logic
+  - v1_1 improves take recall but still cannot identify no_fill/pass/cancel without richer runtime geometry
+  - two v1-correct wait rows regress to take under the medium-confluence threshold

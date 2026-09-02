@@ -1,0 +1,109 @@
+{
+  "generated_at": "2026-08-24T16:37:27",
+  "source_files": {
+    "trade_context_queue": "data\\processed\\gold_context_trades\\gold_v03_trade_context_queue.csv",
+    "rule_seed_queue": "data\\processed\\gold_context_trades\\gold_v03_rule_seed_queue.csv",
+    "hold_context_queue": "data\\processed\\gold_context_trades\\gold_v03_hold_context_queue.csv"
+  },
+  "output_files": {
+    "decision_units": "outputs\\gold_v03_decision_units_v1.csv",
+    "canonical_mapping": "outputs\\gold_v03_canonical_mapping_v1.csv",
+    "normalization_audit": "outputs\\gold_v03_v1_normalization_audit.md",
+    "eligibility_summary": "outputs\\gold_v03_v1_model_eligibility_summary.json",
+    "ohlcv_coverage_manifest": "outputs\\gold_v03_v1_ohlcv_coverage_manifest.csv"
+  },
+  "row_counts": {
+    "decision_units": 149,
+    "hold_context_rows_external": 5,
+    "unique_ohlcv_date_symbol_pairs": 56
+  },
+  "canonical_distributions": {
+    "decision_class": {
+      "executed_trade": 99,
+      "planned_no_fill": 7,
+      "actionable_setup": 14,
+      "pass_cancel": 7,
+      "conditional_setup": 4,
+      "management_context": 4,
+      "session_context": 9,
+      "process_rule_context": 5
+    },
+    "fill_state": {
+      "filled": 99,
+      "not_filled": 8,
+      "passed": 4,
+      "cancelled": 3,
+      "planned_unknown_fill": 17,
+      "managed_existing": 4,
+      "context_only": 14
+    },
+    "trade_side": {
+      "long": 55,
+      "unknown": 3,
+      "short": 68,
+      "mixed_conditional": 13,
+      "both_or_flip": 2,
+      "none": 5,
+      "conditional": 3
+    },
+    "outcome_class": {
+      "unknown": 16,
+      "no_fill": 8,
+      "pass": 4,
+      "breakeven": 20,
+      "win": 54,
+      "loss": 25,
+      "cancelled": 3,
+      "mixed": 5,
+      "context_only": 14
+    },
+    "geometry_mode": {
+      "frame_relative": 136,
+      "numeric_exact": 6,
+      "numeric_partial": 2,
+      "prose_only": 5
+    },
+    "time_confidence": {
+      "medium": 20,
+      "low_missing_market_time": 8,
+      "high": 119,
+      "medium_high": 2
+    },
+    "ohlcv_coverage_status": {
+      "covered_all_relevant_symbols": 149
+    },
+    "eligible_for_policy_learning": {
+      "true": 135,
+      "false": 14
+    },
+    "eligible_for_fill_backtest": {
+      "false": 141,
+      "true": 8
+    },
+    "eligible_for_management_replay": {
+      "false": 111,
+      "true": 38
+    },
+    "elliott_wave_status": {
+      "stated": 103,
+      "not_stated": 46
+    },
+    "frame_evidence_status": {
+      "all_paths_exist": 149
+    }
+  },
+  "numeric_geometry_counts": {
+    "entry_price_numeric": 9,
+    "stop_price_numeric": 7,
+    "target_price_numeric": 7
+  },
+  "raw_distinct_counts": {
+    "decision_type_raw": 90,
+    "direction_raw": 26,
+    "symbol_raw": 8
+  },
+  "derived_result_rows": 5,
+  "unknown_outcome_rows": 16,
+  "mapping_rows_needing_manual_review": 10,
+  "ohlcv_coverage_manifest_missing_pairs": 0
+}

@@ -1,0 +1,202 @@
+version: craig_v1_2_p0_foundation
+status: p0_foundation_only
+created_for: no_lookahead_market_feature_store_before_full_backtest
+
+source_artifacts:
+  architecture: outputs/craig_v1_2_dna_locked_backtest_architecture.md
+  refinement: outputs/craig_v1_2_dna_locked_architecture_refinement_v1.md
+  frozen_v1_1_rulebook: outputs/craig_v1_1_rulebook.yaml
+  frozen_v1_1_validation: outputs/craig_v1_1_validation_report.md
+
+data:
+  raw_dir: data/raw/binance_futures_live_dates
+  inventory_output: outputs/craig_v1_2_ohlcv_inventory.csv
+  readiness_report_output: outputs/craig_v1_2_data_readiness_report.md
+  feature_snapshot_output: outputs/craig_v1_2_market_feature_snapshots.parquet
+  feature_audit_output: outputs/craig_v1_2_market_feature_audit.csv
+  feature_input_scope:
+    include: canonical_date_folder_1m_ny_files
+    exclude:
+      - episode_review_snapshot
+      - already_resampled_htf_files
+      - non_core_symbols_for_v1_2_headline
+  symbols:
+    - SOLUSDT
+    - ETHUSDT
+    - BTCUSDT
+  base_timeframe: 1m
+  derived_timeframes:
+    - 5m
+    - 15m
+    - 1h
+    - 4h
+  timestamp_model:
+    raw_timestamp_semantics: candle_open_utc
+    decision_timestamp_semantics: candle_close_utc
+    resample_anchor: exchange_utc
+    require_complete_resampled_candles: true
+
+execution_cost_assumptions:
+  note: Assumptions for later simulation only; P0 does not score profitability.
+  fee_bps:
+    maker_entry: 2.0
+    maker_exit: 2.0
+    taker_entry: 5.0
+    taker_exit: 5.0
+    stop_exit: 5.0
+  slippage_bps:
+    limit_entry_base: 0.5
+    limit_exit_base: 0.5
+    market_entry_base: 2.0
+    stop_exit_base: 3.0
+  stress_multipliers:
+    - 1.0
+    - 2.0
+    - 5.0
+  same_candle_ambiguity_policy: conservative_stop_first
+
+rr_plan:
+  planned_core_rr_minimum_net: 3.0
+  preferred_core_rr_range:
+    min: 4.0
+    max: 5.0
+  runner_rr_target_range:
+    min: 7.0
+    max: 8.0
+  tp1_role: optional_risk_reduction_not_headline_edge
+  reject_fixed_one_r_scalping: true
+
+target_source_priority:
+  long_above_entry:
+    - nearest_15m_unmitigated_fvg_mid
+    - 15m_sr_zone
+    - current_day_high_so_far
+    - previous_day_high
+    - next_15m_fvg
+    - next_1h_fvg
+    - next_1h_or_4h_opposing_pa_zone
+    - liquidity_pool_above
+    - trendline_projection
+    - fixed_R_fallback
+  short_below_entry:
+    - nearest_15m_unmitigated_fvg_mid
+    - 15m_sr_zone
+    - current_day_low_so_far
+    - previous_day_low
+    - next_15m_fvg
+    - next_1h_fvg
+    - next_1h_or_4h_opposing_pa_zone
+    - liquidity_pool_below
+    - trendline_projection
+    - fixed_R_fallback
+  fixed_R_usage:
+    allowed_as_fallback: true
+    forbidden_as_primary_optimization_target: true
+
+trendline_detection:
+  enabled_for_future_p1: true
+  timeframes:
+    - 15m
+    - 1h
+    - 4h
+  swing_pivot:
+    left_bars: 3
+    right_bars: 3
+    use_confirmed_pivots_only: true
+  anchors:
+    min_anchor_count: 2
+    preferred_anchor_count: 3
+    max_anchor_age_bars:
+      15m: 192
+      1h: 168
+      4h: 120
+  quality_filters:
+    min_line_quality_score: 0.55
+    penalize_single_contact_lines: true
+    penalize_extreme_slope: true
+    require_sr_fvg_or_liquidity_overlap_for_trendline_only_trade: true
+  interaction_thresholds:
+    near_touch_atr_multiple: 0.35
+    wick_sweep_atr_multiple: 0.15
+    break_close_atr_multiple: 0.25
+    retest_max_bars:
+      15m: 16
+      1h: 8
+      4h: 6
+
+btc_context:
+  enabled: true
+  leader_symbol: BTCUSDT
+  applies_to_symbols:
+    - SOLUSDT
+    - ETHUSDT
+  timeframes:
+    - 15m
+    - 1h
+    - 4h
+  model_principle: btc_pa_zone_reaction_not_simple_candle_color
+  context_effects:
+    - confirm
+    - warn
+    - veto
+    - neutral
+  warn_when_near_major_zone_without_reaction: true
+  veto_on_clean_break_against_alt_thesis: true
+  neutral_when_mid_range_chop: true
+  use_future_btc_reaction: false
+
+dna_pass_thresholds:
+  planned_core_rr_net_median_min: 3.5
+  accepted_trade_core_rr_ge_3r_pct_min: 80.0
+  htf_thesis_present_pct_min: 70.0
+  thesis_invalidation_stop_pct_min: 70.0
+  reversal_or_sweep_headline_share_min: 60.0
+  tp1_only_profit_share_max: 25.0
+  runner_path_available_pct_min: 40.0
+  structural_target_pool_present_pct_min: 90.0
+  core_structural_source_pct_min: 70.0
+  fixed_r_primary_target_pct_max: 20.0
+  trendline_or_sr_or_fvg_zone_present_pct_min: 90.0
+  btc_htf_zone_present_pct_for_alt_headline_min: 60.0
+  runner_hold_permission_rate_min: 25.0
+  target_pool_lookahead_violation_count_max: 0
+
+no_lookahead_audit:
+  enabled: true
+  fail_run_on_violation: true
+  decision_timestamp_must_be_closed_candle: true
+  source_candle_close_time_must_be_lte_decision_timestamp: true
+  require_complete_resampled_candles: true
+  audit_columns:
+    - decision_timestamp
+    - latest_1m_close_used
+    - latest_5m_close_used
+    - latest_15m_close_used
+    - latest_1h_close_used
+    - latest_4h_close_used
+    - lookahead_pass
+  forbidden_signal_inputs:
+    - future_candles
+    - future_swing_anchors
+    - future_trendline_anchors
+    - future_fvg
+    - realized_outcome
+    - gold_fill_state
+    - gold_result_r
+    - gold_result_usd
+    - craig_target_action
+    - hindsight_target
+
+walk_forward_plan_for_later:
+  enabled_in_p0: false
+  train_window_days: 180
+  validation_window_days: 45
+  test_window_days: 45
+  embargo_days: 1
+  require_continuous_1m_history: true
+  require_htf_warmup_days_before_each_fold: 30
+
+v1_1_freeze:
+  role: craig_imitation_checkpoint_only
+  mutate_v1_1_artifacts: false
+  interpret_v1_1_replay_as_performance_backtest: false

@@ -1,0 +1,916 @@
+{
+  "generated_at": "2026-08-24 Asia/Seoul",
+  "source_files": {
+    "trade_context_queue": "data\\processed\\gold_context_trades\\gold_v03_trade_context_queue.csv",
+    "rule_seed_queue": "data\\processed\\gold_context_trades\\gold_v03_rule_seed_queue.csv",
+    "session_maps": "data\\processed\\gold_context_trades\\gold_v03_video_session_maps.csv",
+    "hold_context_queue": "data\\processed\\gold_context_trades\\gold_v03_hold_context_queue.csv",
+    "quality_audit": "data\\processed\\gold_context_trades\\gold_v03_quality_audit.csv",
+    "non_gold_recheck_audit": "data\\processed\\gold_context_trades\\gold_v03_non_gold_recheck_audit.csv"
+  },
+  "row_counts": {
+    "trade_context": 149,
+    "rule_seed": 149,
+    "sessions": 32,
+    "hold": 5,
+    "quality_videos": 32,
+    "non_gold_recheck": 196
+  },
+  "join_quality": {
+    "trade_context_ids": 149,
+    "rule_context_ids": 149,
+    "duplicate_trade_context_ids": [],
+    "duplicate_rule_context_ids": [],
+    "trade_without_rule": [],
+    "rule_without_trade": []
+  },
+  "distributions": {
+    "source_stage_v03": [
+      {
+        "value": "v0_3_batch_01_local_srt_frame_ohlcv",
+        "count": 31
+      },
+      {
+        "value": "v0_3_batch_03_local_srt_frame_ohlcv",
+        "count": 31
+      },
+      {
+        "value": "v0_3_batch_02_local_srt_frame_ohlcv",
+        "count": 26
+      },
+      {
+        "value": "frame_data_v02_schema_upgraded",
+        "count": 20
+      },
+      {
+        "value": "pilot3_promoted_with_local_frames",
+        "count": 18
+      },
+      {
+        "value": "manual_seed_upgraded_with_local_frames",
+        "count": 16
+      },
+      {
+        "value": "bdg_after1220_upgraded_with_local_frames",
+        "count": 7
+      }
+    ],
+    "gold_status": [
+      {
+        "value": "v03_gold_trade_context_ready",
+        "count": 68
+      },
+      {
+        "value": "v03_gold_actionable_context_ready",
+        "count": 43
+      },
+      {
+        "value": "v03_gold_context_ready",
+        "count": 38
+      }
+    ],
+    "decision_bucket": [
+      {
+        "value": "executed_trade_or_trade_context",
+        "count": 90
+      },
+      {
+        "value": "actionable_no_fill_or_pre_fill",
+        "count": 54
+      },
+      {
+        "value": "explicit_pass_or_cancel",
+        "count": 5
+      }
+    ],
+    "decision_type_top": [
+      {
+        "value": "executed_trade",
+        "count": 19
+      },
+      {
+        "value": "executed_winner_context",
+        "count": 15
+      },
+      {
+        "value": "executed_or_actionable_trade",
+        "count": 12
+      },
+      {
+        "value": "executed_loss_context",
+        "count": 6
+      },
+      {
+        "value": "executed_trade_win",
+        "count": 4
+      },
+      {
+        "value": "planned_no_fill",
+        "count": 3
+      },
+      {
+        "value": "executed_trade_loss",
+        "count": 3
+      },
+      {
+        "value": "missed_fill",
+        "count": 2
+      },
+      {
+        "value": "planned_then_cancel",
+        "count": 2
+      },
+      {
+        "value": "executed_trade_be",
+        "count": 2
+      },
+      {
+        "value": "executed_small_profit_context",
+        "count": 2
+      },
+      {
+        "value": "actionable_setup_no_trade",
+        "count": 1
+      },
+      {
+        "value": "pass_after_setup",
+        "count": 1
+      },
+      {
+        "value": "planned_then_passed",
+        "count": 1
+      },
+      {
+        "value": "actual_trade",
+        "count": 1
+      },
+      {
+        "value": "actual_trade_reentry",
+        "count": 1
+      },
+      {
+        "value": "actual_trade_manual_close",
+        "count": 1
+      },
+      {
+        "value": "actual_trade_loss",
+        "count": 1
+      },
+      {
+        "value": "planned_then_no_fill",
+        "count": 1
+      },
+      {
+        "value": "executed_trade_win_overnight",
+        "count": 1
+      },
+      {
+        "value": "executed_trade_be_loss",
+        "count": 1
+      },
+      {
+        "value": "executed_trade_profit_reduced",
+        "count": 1
+      },
+      {
+        "value": "executed_trade_recap_detailed",
+        "count": 1
+      },
+      {
+        "value": "executed_trade_be_after_reentry",
+        "count": 1
+      },
+      {
+        "value": "executed_trade_with_execution_anomaly",
+        "count": 1
+      },
+      {
+        "value": "conditional_pre_news_setup_context",
+        "count": 1
+      },
+      {
+        "value": "executed_break_even_context",
+        "count": 1
+      },
+      {
+        "value": "executed_management_context",
+        "count": 1
+      },
+      {
+        "value": "missed_or_order_error_context",
+        "count": 1
+      },
+      {
+        "value": "executed_wave_setup_context",
+        "count": 1
+      },
+      {
+        "value": "executed_short_context",
+        "count": 1
+      },
+      {
+        "value": "executed_runner_management_context",
+        "count": 1
+      },
+      {
+        "value": "conditional_reversal_long_context",
+        "count": 1
+      },
+      {
+        "value": "strategy_explainer_to_trade_context",
+        "count": 1
+      },
+      {
+        "value": "executed_or_reassessed_context",
+        "count": 1
+      },
+      {
+        "value": "executed_final_trade_context",
+        "count": 1
+      },
+      {
+        "value": "executed_winner_then_be_context",
+        "count": 1
+      },
+      {
+        "value": "executed_loss_sequence_context",
+        "count": 1
+      },
+      {
+        "value": "executed_break_even_management_context",
+        "count": 1
+      },
+      {
+        "value": "no_fill_no_chase_context",
+        "count": 1
+      }
+    ],
+    "symbol_raw": [
+      {
+        "value": "SOLUSDT",
+        "count": 96
+      },
+      {
+        "value": "ETHUSDT",
+        "count": 28
+      },
+      {
+        "value": "SOLUSDT/ETHUSDT",
+        "count": 7
+      },
+      {
+        "value": "BTCUSDT|SOLUSDT",
+        "count": 6
+      },
+      {
+        "value": "SOLUSDT|ETHUSDT",
+        "count": 5
+      },
+      {
+        "value": "ETHUSDT|SOLUSDT",
+        "count": 3
+      },
+      {
+        "value": "SOLUSDT|BTCUSDT",
+        "count": 3
+      },
+      {
+        "value": "ATOM",
+        "count": 1
+      }
+    ],
+    "symbol_normalized": [
+      {
+        "value": "SOLUSDT",
+        "count": 96
+      },
+      {
+        "value": "ETHUSDT",
+        "count": 28
+      },
+      {
+        "value": "SOLUSDT|ETHUSDT",
+        "count": 12
+      },
+      {
+        "value": "BTCUSDT|SOLUSDT",
+        "count": 6
+      },
+      {
+        "value": "ETHUSDT|SOLUSDT",
+        "count": 3
+      },
+      {
+        "value": "SOLUSDT|BTCUSDT",
+        "count": 3
+      },
+      {
+        "value": "ATOM",
+        "count": 1
+      }
+    ],
+    "direction_raw": [
+      {
+        "value": "short",
+        "count": 64
+      },
+      {
+        "value": "long",
+        "count": 50
+      },
+      {
+        "value": "short_or_long_as_spoken",
+        "count": 7
+      },
+      {
+        "value": "mixed_or_conditional",
+        "count": 3
+      },
+      {
+        "value": "unknown_until_frame_review",
+        "count": 2
+      },
+      {
+        "value": "conditional",
+        "count": 2
+      },
+      {
+        "value": "session_management",
+        "count": 2
+      },
+      {
+        "value": "mixed_or_unknown",
+        "count": 1
+      },
+      {
+        "value": "long_to_short_reassessment",
+        "count": 1
+      },
+      {
+        "value": "short_to_long_conditional",
+        "count": 1
+      },
+      {
+        "value": "long_or_reversal_sequence",
+        "count": 1
+      },
+      {
+        "value": "short_or_reversal",
+        "count": 1
+      },
+      {
+        "value": "mixed_open_ended",
+        "count": 1
+      },
+      {
+        "value": "mixed",
+        "count": 1
+      },
+      {
+        "value": "bullish_bias_but_flexible",
+        "count": 1
+      },
+      {
+        "value": "long_or_flip_attempt",
+        "count": 1
+      },
+      {
+        "value": "conditional_long_then_short_risk",
+        "count": 1
+      },
+      {
+        "value": "long_or_reversal_runner",
+        "count": 1
+      },
+      {
+        "value": "long_or_continuation",
+        "count": 1
+      },
+      {
+        "value": "short_or_pullback",
+        "count": 1
+      },
+      {
+        "value": "conditional_bullish_breakout",
+        "count": 1
+      },
+      {
+        "value": "long_or_breakout",
+        "count": 1
+      },
+      {
+        "value": "mixed_or_long",
+        "count": 1
+      },
+      {
+        "value": "conditional_short_or_continuation",
+        "count": 1
+      },
+      {
+        "value": "conditional_short",
+        "count": 1
+      },
+      {
+        "value": "long_and_short_losses",
+        "count": 1
+      }
+    ],
+    "direction_normalized": [
+      {
+        "value": "short",
+        "count": 68
+      },
+      {
+        "value": "long",
+        "count": 56
+      },
+      {
+        "value": "hold_unknown_or_nontrade",
+        "count": 13
+      },
+      {
+        "value": "conditional_or_mixed",
+        "count": 11
+      },
+      {
+        "value": "bullish_bias_but_flexible",
+        "count": 1
+      }
+    ],
+    "market_date_count": 36,
+    "market_dates": [
+      "2024-10-17",
+      "2024-10-24",
+      "2024-11-19",
+      "2024-11-20",
+      "2024-12-04",
+      "2025-01-08",
+      "2025-01-31",
+      "2025-02-18",
+      "2025-02-26",
+      "2025-03-26",
+      "2025-03-27",
+      "2025-04-09",
+      "2025-04-30",
+      "2025-05-01",
+      "2025-05-07",
+      "2025-06-11",
+      "2025-06-16",
+      "2025-07-21",
+      "2025-07-23",
+      "2025-07-27",
+      "2025-08-19",
+      "2025-08-20",
+      "2025-09-08",
+      "2025-10-17",
+      "2025-11-06",
+      "2025-11-07",
+      "2025-12-04",
+      "2025-12-11",
+      "2026-01-07",
+      "2026-02-06",
+      "2026-02-26",
+      "2026-03-18",
+      "2026-04-16",
+      "2026-05-06",
+      "2026-05-28",
+      "2026-07-22"
+    ]
+  },
+  "field_population_trade_context": [
+    {
+      "column": "session_macro_context_ko",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0
+    },
+    {
+      "column": "scenario_tree_ko",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0
+    },
+    {
+      "column": "symbol_selection_context_ko",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0
+    },
+    {
+      "column": "elliott_wave_context_ko",
+      "nonempty": 103,
+      "null": 46,
+      "nonempty_rate": 0.691
+    },
+    {
+      "column": "trade_thesis_link_ko",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0
+    },
+    {
+      "column": "structure_reference_ko",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0
+    },
+    {
+      "column": "setup_context_ko",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0
+    },
+    {
+      "column": "entry_plan_ko",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0
+    },
+    {
+      "column": "management_plan_ko",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0
+    },
+    {
+      "column": "live_thesis_changes_ko",
+      "nonempty": 138,
+      "null": 11,
+      "nonempty_rate": 0.926
+    },
+    {
+      "column": "exit_result_ko",
+      "nonempty": 143,
+      "null": 6,
+      "nonempty_rate": 0.96
+    },
+    {
+      "column": "ohlcv_alignment_ko",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0
+    },
+    {
+      "column": "rule_feature_vector_seed_ko",
+      "nonempty": 148,
+      "null": 1,
+      "nonempty_rate": 0.993
+    },
+    {
+      "column": "invalidation_condition_ko",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0
+    },
+    {
+      "column": "remaining_uncertainty_ko",
+      "nonempty": 147,
+      "null": 2,
+      "nonempty_rate": 0.987
+    },
+    {
+      "column": "entry_price",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0
+    },
+    {
+      "column": "stop_price",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0
+    },
+    {
+      "column": "target_price",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0
+    },
+    {
+      "column": "realized_result",
+      "nonempty": 133,
+      "null": 16,
+      "nonempty_rate": 0.893
+    },
+    {
+      "column": "frame_evidence_paths",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0
+    }
+  ],
+  "price_numeric": {
+    "entry_price": {
+      "numeric": 9,
+      "nonempty": 149
+    },
+    "stop_price": {
+      "numeric": 7,
+      "nonempty": 149
+    },
+    "target_price": {
+      "numeric": 7,
+      "nonempty": 149
+    }
+  },
+  "field_population_rule_seed": [
+    {
+      "column": "macro_bias_feature",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0,
+      "distinct": 143
+    },
+    {
+      "column": "scenario_feature",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0,
+      "distinct": 92
+    },
+    {
+      "column": "wave_fib_feature",
+      "nonempty": 103,
+      "null": 46,
+      "nonempty_rate": 0.691,
+      "distinct": 78
+    },
+    {
+      "column": "setup_trigger_feature",
+      "nonempty": 146,
+      "null": 3,
+      "nonempty_rate": 0.98,
+      "distinct": 101
+    },
+    {
+      "column": "entry_feature",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0,
+      "distinct": 133
+    },
+    {
+      "column": "invalidation_feature",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0,
+      "distinct": 92
+    },
+    {
+      "column": "management_feature",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0,
+      "distinct": 128
+    },
+    {
+      "column": "outcome_feature",
+      "nonempty": 143,
+      "null": 6,
+      "nonempty_rate": 0.96,
+      "distinct": 143
+    },
+    {
+      "column": "negative_or_pass_rule",
+      "nonempty": 38,
+      "null": 111,
+      "nonempty_rate": 0.255,
+      "distinct": 5
+    },
+    {
+      "column": "quantification_notes_ko",
+      "nonempty": 149,
+      "null": 0,
+      "nonempty_rate": 1.0,
+      "distinct": 89
+    }
+  ],
+  "ohlcv_date_coverage": {
+    "2024-10-17": {
+      "BTCUSDT": false,
+      "ETHUSDT": false,
+      "SOLUSDT": false
+    },
+    "2024-10-24": {
+      "BTCUSDT": false,
+      "ETHUSDT": false,
+      "SOLUSDT": false
+    },
+    "2024-11-19": {
+      "BTCUSDT": false,
+      "ETHUSDT": false,
+      "SOLUSDT": false
+    },
+    "2024-11-20": {
+      "BTCUSDT": false,
+      "ETHUSDT": false,
+      "SOLUSDT": false
+    },
+    "2024-12-04": {
+      "BTCUSDT": false,
+      "ETHUSDT": false,
+      "SOLUSDT": false
+    },
+    "2025-01-08": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-01-31": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-02-18": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-02-26": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-03-26": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-03-27": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-04-09": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-04-30": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-05-01": {
+      "BTCUSDT": false,
+      "ETHUSDT": false,
+      "SOLUSDT": true
+    },
+    "2025-05-07": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-06-11": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-06-16": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-07-21": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-07-23": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-07-27": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-08-19": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-08-20": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-09-08": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-10-17": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-11-06": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-11-07": {
+      "BTCUSDT": false,
+      "ETHUSDT": false,
+      "SOLUSDT": false
+    },
+    "2025-12-04": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2025-12-11": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2026-01-07": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2026-02-06": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2026-02-26": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2026-03-18": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2026-04-16": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2026-05-06": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2026-05-28": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    },
+    "2026-07-22": {
+      "BTCUSDT": true,
+      "ETHUSDT": true,
+      "SOLUSDT": true
+    }
+  },
+  "quality_local_frames": [
+    {
+      "value": "yes",
+      "count": 29
+    },
+    {
+      "value": "legacy_only",
+      "count": 3
+    }
+  ],
+  "hold_status": [
+    {
+      "value": "v03_hold_context_incomplete",
+      "count": 3
+    },
+    {
+      "value": "v03_hold_context_needs_frame_recovery",
+      "count": 2
+    }
+  ],
+  "non_gold_review_class": [
+    {
+      "value": "auto_candidate_covered_by_merged_v03_context",
+      "count": 173
+    },
+    {
+      "value": "legacy_auto_candidate_out_of_current_local_scope",
+      "count": 10
+    },
+    {
+      "value": "legacy_candidate_promoted_to_v03_gold",
+      "count": 7
+    },
+    {
+      "value": "auto_candidate_covered_by_hold",
+      "count": 4
+    },
+    {
+      "value": "legacy_candidate_demoted_to_hold_after_recheck",
+      "count": 1
+    },
+    {
+      "value": "auto_candidate_not_promoted_intro_or_session_setup",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+pandas
+numpy
+openpyxl
+pillow
+scipy
+imageio-ffmpeg
+pyyaml
+pyarrow

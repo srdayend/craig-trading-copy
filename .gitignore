@@ -1,0 +1,60 @@
+# Python/runtime artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Local Codex/Node dependencies
+.codex_local_deps/
+node_modules/
+
+# Local editor/vault state
+.obsidian/
+.vscode/
+.idea/
+
+# Local secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Raw/copyrighted/private evidence that should not be published
+archive/
+video source/
+*.mp4
+*.srt
+크레이그 매매 수동 저장파일.xlsx
+data/source/
+data/raw/
+data/processed/tmp/
+data/processed/**
+!data/processed/
+!data/processed/README.md
+!data/processed/gold_context_trades/
+!data/processed/gold_context_trades/gold_trade_context_schema.md
+
+# Generated heavy/binary outputs. Keep only curated text reports.
+outputs/**
+!outputs/
+!outputs/README.md
+!outputs/*.md
+!outputs/*.yaml
+!outputs/gold_v03_data_quality_profile_v1.json
+!outputs/gold_v03_v1_model_eligibility_summary.json
+*.csv
+*.parquet
+*.xlsx
+*.zip
+*.ndjson
+*.log
