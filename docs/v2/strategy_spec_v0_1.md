@@ -38,8 +38,8 @@ A valid 1m pattern is never sufficient without an active higher-timeframe scenar
 
 Hard rules are deterministic requirements for the initial strategy.
 
-- The baseline trading symbol is SOLUSDT until symbol-selection logic is separately validated.
-- BTCUSDT is context, not a blindly copied directional signal.
+- SOLUSDT is the only traded instrument. Symbol selection and multi-symbol ranking are excluded from every v2 stage unless the owner explicitly changes this specification.
+- BTCUSDT is used only to create bias and market context, not as a traded instrument or a blindly copied directional signal.
 - Primary execution timeframe is 1m.
 - Primary intraday price-action timeframe is 15m.
 - Entry requires an active or reached price-action zone.
@@ -63,7 +63,6 @@ Soft context changes side permission, confidence, position size, target ambition
 - Expected daily range and reachable zones.
 - Counter-bias versus aligned-bias trade.
 - Session phase and volatility regime.
-- Relative strength and setup cleanliness across symbols.
 - Strength and freshness of the current 15m PA reaction.
 - Density of opposing structure before the target.
 
@@ -89,7 +88,7 @@ Minimum fields:
 - session_id
 - session_date
 - session_timezone_definition
-- primary_symbol
+- traded_symbol: SOLUSDT (constant)
 - btc_relevance: decisive, contextual, neutral
 - bias_side: long, short, neutral, open_ended
 - bias_strength: weak, medium, strong
@@ -338,7 +337,6 @@ A single Craig trade or a single profitable backtest example is insufficient jus
 ## 10. Open decisions for v0.2
 
 - Exact session timezone and PDH/PDL boundary.
-- Whether v0.1 remains SOL-only or includes a minimal symbol selector.
 - Formal definition of a reachable 15m PA zone.
 - Formal acceptance/failure rule for reversal-to-continuation transition.
 - Strict CHoCH/BOS swing definition.
