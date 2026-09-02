@@ -124,7 +124,6 @@ Add one feature family at a time:
 - BTC decisive-location context
 - daily/4h bias
 - session and volatility regime
-- symbol selection
 - macro-event context
 - validated trendlines
 - manual wave/context filter
