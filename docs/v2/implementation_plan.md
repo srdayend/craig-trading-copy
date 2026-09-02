@@ -86,7 +86,7 @@ Forbidden direct reuse in the v2 decision engine:
 - fill-candle ambiguity controls.
 - realistic fee and slippage.
 - one-position baseline.
-- correlated exposure control for later multi-symbol version.
+- overlapping-position and repeated-entry control for SOLUSDT.
 - daily risk state.
 
 ### Increment 6: evaluation
